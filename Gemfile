@@ -4,4 +4,4 @@ source "https://rubygems.org"
 
 # gem "rails"
 
-gam 'rest-client'
+gem 'rest-client'
