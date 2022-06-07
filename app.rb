@@ -1,4 +1,5 @@
 require_relative 'services/fletcher'
+require 'json'
 
 # This is the base file for the app, where it will be launched from.
 
@@ -32,11 +33,21 @@ query_params = {
   "max_results": 75,
   "start_time": start_time,
   "end_time": end_time,
-  "tweet.fields": "attachments,author_id,conversation_id,created_at,entities,id,lang"
+  "tweet.fields": "attachments,author_id,conversation_id,created_at,id,lang"
 }
 
 puts "calling for fetch function of Fletcher"
-results = fletcher.fetch(query_params)
 puts "fletcher function was called"
-puts results.code, JSON.pretty_generate(JSON.parse(results.body))
+# Calling Fletcher's method #fetch so that it fetches results
+results = fletcher.fetch(query_params)
+# These results need to be passed to a builder to be extracted and passed on the next step
+results = JSON.parse(results.body)
+# results are actually stored inside a Hash, itself containing a data key, which value is a collection of hashes
+# from there I can iterate on the elements and collect their contents.
+puts results.class
+results["data"].each do |result|
+  puts result
+  puts result.class
+end
+
 puts "results were sent and displayed"
